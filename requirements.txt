@@ -1,0 +1,2 @@
+cruft==2.16.0
+pre-commit==4.6.2

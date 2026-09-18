@@ -1,0 +1,19 @@
+{
+  "template": "https://github.com/robert-koch-institut/mex-template",
+  "commit": "50273150032518805e0bff9f8fcd010f5c745605",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "project_name": "helm",
+      "short_summary": "Helm charts for deploying MEx infrastructure.",
+      "long_summary": "This repository contains the Helm charts used to deploy the MEx ecosystem onto Kubernetes. It bundles chart definitions, default values and environment-specific overrides for the metadata catalogue's backend, editor and extractor services, along with the supporting infrastructure they depend on, such as the graph database and object storage.",
+      "containerize": false,
+      "publish_to_pypi": false,
+      "python_version_min": "3.14",
+      "python_version_max": "3.14",
+      "_template": "https://github.com/robert-koch-institut/mex-template",
+      "_commit": "50273150032518805e0bff9f8fcd010f5c745605"
+    }
+  },
+  "directory": null
+}

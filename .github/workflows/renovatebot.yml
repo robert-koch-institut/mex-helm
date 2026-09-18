@@ -1,0 +1,35 @@
+name: Renovate
+
+on:
+  push:
+    branches: ["main"]
+  schedule:
+    - cron: "14 3 * * 1-5"
+      timezone: "Europe/Berlin"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+
+      - name: Run renovatebot
+        uses: renovatebot/github-action@37beffda261423addd537c33f2d126df7f6ffbab # v46.2.6
+        env:
+          RENOVATE_GIT_PRIVATE_KEY: ${{ secrets.MEX_PLAIN_SIGNING_KEY }}
+          RENOVATE_REPOSITORIES: ${{ github.repository }}
+        with:
+          configurationFile: renovate.json
+          token: ${{ secrets.MEX_RENOVATE_TOKEN }}
