@@ -72,5 +72,6 @@ components of the MEx project are open-sourced under the same license as well.
 ### Updating dependencies
 
 - update boilerplate files with `cruft update`
+- update global requirements in `requirements.txt` manually
 - update git hooks with `pre-commit autoupdate`
 - update github actions in `.github/workflows/*.yml` manually

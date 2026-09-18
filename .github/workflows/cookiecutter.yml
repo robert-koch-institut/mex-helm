@@ -53,7 +53,7 @@ jobs:
           python-version: "3.14"
 
       - name: Install requirements
-        run: make install
+        run: make setup
 
       - name: Configure git
         env:
