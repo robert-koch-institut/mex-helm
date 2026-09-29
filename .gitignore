@@ -83,15 +83,15 @@ celerybeat-schedule.*
 celerybeat.pid
 
 # Environments
-*.env
-.env
-.env.tests
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+# *.env
+# .env
+# .env.tests
+# .venv
+# env/
+# venv/
+# ENV/
+# env.bak/
+# venv.bak/
 
 # mypy
 .mypy_cache/
@@ -151,3 +151,6 @@ schema.json
 storage/
 tmp*/
 work/
+
+# charts
+/charts/*/charts

@@ -1,0 +1,73 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-setup-users
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    # Run after Helm creates/updates the main resources
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "5"
+    # Clean up old/successful job pods automatically before new runs
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: minio-mc-setup
+          image: quay.io/minio/minio-client:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+
+              echo "==> Waiting for MinIO service to become reachable..."
+              until mc alias set local http://{{ .Release.Name }}-minio:{{ .Values.minio.service.port }} "$ROOT_USER" "$ROOT_PASSWORD"; do
+                echo "MinIO not ready yet. Retrying in 3 seconds..."
+                sleep 3
+              done
+
+              echo "==> Creating application user: $APP_USER"
+              mc admin user add local "$APP_USER" "$APP_SECRET" || true
+
+              echo "==> Creating custom bucket policy..."
+              cat <<EOF > /tmp/mex-extractors-rw-policy.json
+              {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Action": [
+                      "s3:PutObject",
+                      "s3:GetObject",
+                      "s3:DeleteObject",
+                      "s3:ListBucket"
+                    ],
+                    "Resource": [
+                      "arn:aws:s3:::mex-etl-dev",
+                      "arn:aws:s3:::mex-etl-dev/*",
+                      "arn:aws:s3:::mex-etl-local",
+                      "arn:aws:s3:::mex-etl-local/*"
+                    ]
+                  }
+                ]
+              }
+              EOF
+
+              mc admin policy create local mex-extractors-rw-policy /tmp/mex-extractors-rw-policy.json || true
+
+              echo "==> Attaching policy to user..."
+              mc admin policy attach local mex-extractors-rw-policy --user "$APP_USER"
+
+              echo "==> Post-install configuration complete!"
+          env:
+            - name: ROOT_USER
+              value: {{ .Values.minio.auth.rootUser | quote }}
+            - name: ROOT_PASSWORD
+              value: {{ .Values.minio.auth.rootPassword | quote }}
+            - name: APP_USER
+              value: {{ .Values.appCredentials.user | quote }}
+            - name: APP_SECRET
+              value: {{ .Values.appCredentials.secret | quote }}
