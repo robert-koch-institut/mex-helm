@@ -1,0 +1,18 @@
+environments:
+  dev:
+    kubeContext: workload
+
+---
+
+repositories: []
+
+releases:
+  - name: minio
+    namespace: mex-s3
+    createNamespace: false
+    chart: ./charts/minio
+    missingFileHandler: Warn
+    values:
+      - envs/{{ .Environment.Name }}/minio/values.yaml
+    secrets:
+      - envs/{{ .Environment.Name }}/minio/secrets.yaml

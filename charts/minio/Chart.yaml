@@ -1,0 +1,8 @@
+apiVersion: v2
+name: minio
+description: Local dev wrapper for the external MinIO chart
+version: 0.1.0
+dependencies:
+  - name: minio
+    version: "0.13.4"
+    repository: "oci://ghcr.io/cloudpirates-io/helm-charts"

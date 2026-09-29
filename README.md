@@ -61,17 +61,13 @@ components of the MEx project are open-sourced under the same license as well.
 
 ### Installation
 
-- install python on your system
-- on unix, run `make install`
-- on windows, run `.\mex.bat install`
-
-### Linting and testing
-
-- run all linters with `make lint` or `.\mex.bat lint`
+- install helm, helmfile, sops, age
+- install helm plugins: helm-secrets, helm-diff (https://github.com/jkroepke/helm-secrets, https://github.com/databus23/helm-diff)
+- get age key from team
+- set environment SOPS_AGE_KEY_FILE to key path
 
 ### Updating dependencies
 
 - update boilerplate files with `cruft update`
-- update global requirements in `requirements.txt` manually
 - update git hooks with `pre-commit autoupdate`
 - update github actions in `.github/workflows/*.yml` manually
