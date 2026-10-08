@@ -73,3 +73,8 @@ deploy with: `helmfile -e <env> apply`
 - update boilerplate files with `cruft update`
 - update git hooks with `pre-commit autoupdate`
 - update github actions in `.github/workflows/*.yml` manually
+
+
+### Misc
+
+read/edit secrets with: `sops <path/to/secrets.yaml>`
