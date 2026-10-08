@@ -1,6 +1,8 @@
 environments:
   local:
     kubeContext: minikube
+  dev:
+    kubeContext: workload
 
 ---
 
@@ -10,7 +12,7 @@ repositories:
 
 releases:
   - name: s3-store
-    namespace: mex-s3
+    namespace: mex
     createNamespace: false
     chart: ./charts/s3-store
     missingFileHandler: Warn
