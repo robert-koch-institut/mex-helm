@@ -18,3 +18,10 @@ releases:
       - envs/{{ .Environment.Name }}/s3-store/values.yaml
     secrets:
       - envs/{{ .Environment.Name }}/s3-store/secrets.yaml
+  - name: mex-drop
+    namespace: mex
+    createNamespace: false
+    chart: ./charts/mex-drop
+    missingFileHandler: Warn
+    values:
+      - envs/{{ .Environment.Name }}/mex-drop/values.yaml
