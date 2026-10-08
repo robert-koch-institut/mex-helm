@@ -1,6 +1,0 @@
-dependencies:
-- name: minio
-  repository: oci://ghcr.io/cloudpirates-io/helm-charts
-  version: 0.13.4
-digest: sha256:1bd6a3b58d7809d64d5e13bc1ff706dfcd25f536a8a7855c21a63fe64e0366c9
-generated: "2026-09-29T10:21:59.4685691+02:00"

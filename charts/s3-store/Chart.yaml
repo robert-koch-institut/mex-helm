@@ -1,0 +1,8 @@
+apiVersion: v2
+name: s3-store
+description: Local dev wrapper for RustFS
+version: 0.1.0
+dependencies:
+  - name: rustfs
+    version: "1.0.1"
+    repository: "https://charts.rustfs.com"

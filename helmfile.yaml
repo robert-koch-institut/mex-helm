@@ -1,18 +1,20 @@
 environments:
   dev:
-    kubeContext: workload
+    kubeContext: minikube
 
 ---
 
-repositories: []
+repositories:
+  - name: rustfs
+    url: https://charts.rustfs.com
 
 releases:
-  - name: minio
+  - name: s3-store
     namespace: mex-s3
     createNamespace: false
-    chart: ./charts/minio
+    chart: ./charts/s3-store
     missingFileHandler: Warn
     values:
-      - envs/{{ .Environment.Name }}/minio/values.yaml
+      - envs/{{ .Environment.Name }}/s3-store/values.yaml
     secrets:
-      - envs/{{ .Environment.Name }}/minio/secrets.yaml
+      - envs/{{ .Environment.Name }}/s3-store/secrets.yaml

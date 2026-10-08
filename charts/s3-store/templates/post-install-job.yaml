@@ -4,10 +4,8 @@ metadata:
   name: {{ .Release.Name }}-setup-users
   namespace: {{ .Release.Namespace }}
   annotations:
-    # Run after Helm creates/updates the main resources
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "5"
-    # Clean up old/successful job pods automatically before new runs
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
   ttlSecondsAfterFinished: 60
@@ -15,22 +13,26 @@ spec:
     spec:
       restartPolicy: OnFailure
       containers:
-        - name: minio-mc-setup
-          image: quay.io/minio/minio-client:latest
+        - name: rustfs-rc-setup
+          image: rustfs/rc:latest
           command:
             - /bin/sh
             - -c
             - |
               set -e
 
-              echo "==> Waiting for MinIO service to become reachable..."
-              until mc alias set local http://{{ .Release.Name }}-minio:{{ .Values.minio.service.port }} "$ROOT_USER" "$ROOT_PASSWORD"; do
-                echo "MinIO not ready yet. Retrying in 3 seconds..."
+              echo "==> Waiting for RustFS service to become reachable..."
+              until rc alias set local http://{{ .Release.Name }}-rustfs-svc:9000 "$ROOT_USER" "$ROOT_PASSWORD"; do
+                echo "RustFS not ready yet. Retrying in 3 seconds..."
                 sleep 3
               done
 
+              echo "==> Creating default buckets..."
+              rc mb local/mex-etl-dev || true
+              rc mb local/mex-etl-local || true
+
               echo "==> Creating application user: $APP_USER"
-              mc admin user add local "$APP_USER" "$APP_SECRET" || true
+              rc admin user add local "$APP_USER" "$APP_SECRET" || true
 
               echo "==> Creating custom bucket policy..."
               cat <<EOF > /tmp/mex-extractors-rw-policy.json
@@ -56,17 +58,17 @@ spec:
               }
               EOF
 
-              mc admin policy create local mex-extractors-rw-policy /tmp/mex-extractors-rw-policy.json || true
+              rc admin policy create local mex-extractors-rw-policy /tmp/mex-extractors-rw-policy.json || true
 
               echo "==> Attaching policy to user..."
-              mc admin policy attach local mex-extractors-rw-policy --user "$APP_USER"
+              rc admin policy attach local mex-extractors-rw-policy --user "$APP_USER"
 
               echo "==> Post-install configuration complete!"
           env:
             - name: ROOT_USER
-              value: {{ .Values.minio.auth.rootUser | quote }}
+              value: {{ .Values.rustfs.secret.rustfs.access_key | quote }}
             - name: ROOT_PASSWORD
-              value: {{ .Values.minio.auth.rootPassword | quote }}
+              value: {{ .Values.rustfs.secret.rustfs.secret_key | quote }}
             - name: APP_USER
               value: {{ .Values.appCredentials.user | quote }}
             - name: APP_SECRET
