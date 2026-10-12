@@ -14,25 +14,20 @@ ingress:
   enabled: false
   host: ""
 
-# configMapData:
-#   MEX_DROP_DIRECTORY: data
-#   MEX_DROP_API_HOST: 0.0.0.0
-#   REFLEX_BACKEND_PATH: "/api"
-#   REFLEX_CORS_ALLOWED_ORIGINS: "*"
-
 frontend:
   env:
     MEX_DROP_FRONTEND_HOST: 0.0.0.0
+    REFLEX_DEPLOY_URL: http://drop.mex
+    REFLEX_API_URL: "http://api-drop.mex"
+    MEX_DROP_API_PORT: "80"
   path: "/"
 
 api:
   env:
-    MEX_DROP_API_KEY_DATABASE: "{\"mex\":[\"mex\"],\"test\":[\"test\"],\"other\":[\"other\"]}"
+    MEX_DROP_API_KEY_DATABASE: '{"mex":["mex"],"test":["test"],"other":["other"]}'
     MEX_DROP_DIRECTORY: data
     MEX_DROP_API_HOST: 0.0.0.0
-    MEX_REFLEX_BACKEND_PATH: "/api"
-    MEX_REFLEX_API_URL: "http://drop.mex/api"
-  path: "/api"
+  path: "/"
 
 persistence:
   enabled: true
