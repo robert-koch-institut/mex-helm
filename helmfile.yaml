@@ -23,8 +23,8 @@ releases:
   - name: s3-store
     chart: ./charts/s3-store
     inherit:
-      template: default
+      - template: default
   - name: mex-drop
     chart: ./charts/mex-drop
     inherit:
-      template: default
+      - template: default
