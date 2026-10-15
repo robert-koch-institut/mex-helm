@@ -1,0 +1,74 @@
+rustfs:
+  replicaCount: 1
+  mode:
+    distributed:
+      enabled: false
+    standalone:
+      enabled: true
+
+  secret:
+    rustfs:
+      access_key: "..."
+      secret_key: "..."
+
+  storageclass:
+    name: "nfs-client"
+    dataStorageSize: "512Mi"
+
+  service:
+    type: ClusterIP
+    endpoint:
+      port: 9000
+    console:
+      port: 9090
+
+  config:
+    rustfs:
+      address: ":9000"
+      console_enable: true
+      console_address: ":9090"
+
+  ingress:
+    enabled: true
+    className: "nginx"
+    hosts:
+      - host: api-mex-s3.dev.platform.rki.local
+        paths:
+          - path: /
+            pathType: Prefix
+            servicePort: endpoint
+      - host: console-mex-s3.dev.platform.rki.local
+        paths:
+          - path: /
+            pathType: Prefix
+            servicePort: console
+
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+provisioning:
+  buckets:
+    - mex-etl-dev
+    - mex-etl-local
+
+  policies:
+    - name: mex-extractors-rw-policy
+      definition:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:PutObject
+              - s3:GetObject
+              - s3:DeleteObject
+              - s3:ListBucket
+            Resource:
+              - arn:aws:s3:::mex-etl-dev
+              - arn:aws:s3:::mex-etl-dev/*
+              - arn:aws:s3:::mex-etl-local
+              - arn:aws:s3:::mex-etl-local/*

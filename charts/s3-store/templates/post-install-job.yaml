@@ -1,0 +1,59 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-setup-users
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: rustfs-rc-setup
+          image: rustfs/rc:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              ENDPOINT="http://{{ .Release.Name }}-rustfs-svc:{{ .Values.rustfs.service.endpoint.port }}"
+
+              echo "==> Waiting for RustFS service..."
+              until rc alias set local "$ENDPOINT" "$ROOT_USER" "$ROOT_PASSWORD"; do
+                sleep 3
+              done
+
+              # 1. Declaratively loop through and create buckets
+              {{- range .Values.provisioning.buckets }}
+              echo "==> Ensuring bucket: {{ . }}"
+              rc mb local/{{ . }} || true
+              {{- end }}
+
+              # 2. Create the application user
+              echo "==> Ensuring application user: $APP_USER"
+              rc admin user add local "$APP_USER" "$APP_SECRET" || true
+
+              # 3. Declaratively loop through and create/update policies
+              {{- range .Values.provisioning.policies }}
+              echo "==> Applying policy: {{ .name }}"
+              cat <<EOF > /tmp/{{ .name }}.json
+              {{ .definition | toJson }}
+              EOF
+              rc admin policy create local {{ .name }} /tmp/{{ .name }}.json || true
+              rc admin policy attach local {{ .name }} --user "$APP_USER"
+              {{- end }}
+
+              echo "==> Post-install configuration complete!"
+          env:
+            - name: ROOT_USER
+              value: {{ .Values.rustfs.secret.rustfs.access_key | quote }}
+            - name: ROOT_PASSWORD
+              value: {{ .Values.rustfs.secret.rustfs.secret_key | quote }}
+            - name: APP_USER
+              value: {{ .Values.appCredentials.user | quote }}
+            - name: APP_SECRET
+              value: {{ .Values.appCredentials.secret | quote }}
