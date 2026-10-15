@@ -38,6 +38,16 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Cache requirements
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        env:
+          cache-name: cache-requirements
+        with:
+          path: ~/.cache/pip
+          key: ${{ env.cache-name }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ env.cache-name }}-
+
       - name: Cache environment
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         env:
@@ -57,6 +67,16 @@ jobs:
           key: ${{ env.cache-name }}-${{ hashFiles('.pre-commit-config.yaml') }}
           restore-keys: |
             ${{ env.cache-name }}-
+
+      - name: Setup python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.14"
+
+      - name: Install requirements
+        run: |
+          echo ${{ matrix.python-version }} > .python-version
+          make install
 
       - name: Run linters
         run: make lint
