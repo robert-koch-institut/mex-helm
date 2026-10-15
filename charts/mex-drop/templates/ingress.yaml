@@ -4,9 +4,9 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}-ing
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.ingress.className }}
   rules:
-    - host: drop.mex
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
           - path: {{ .Values.frontend.path }}
@@ -17,7 +17,7 @@ spec:
                 port:
                   number: {{ .Values.service.frontend.port }}
 
-    - host: api-drop.mex
+    - host: "api-{{ .Values.ingress.host }}"
       http:
         paths:
           - path: {{ .Values.api.path }}

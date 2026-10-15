@@ -25,6 +25,12 @@ spec:
           {{- end }}
           {{- if .Values.frontend.env }}
           env:
+            {{- if .Values.ingress.enabled }}
+            - name: REFLEX_DEPLOY_URL
+              value: "http://{{ .Values.ingress.host }}"
+            - name: REFLEX_API_URL
+              value: "http://api-{{ .Values.ingress.host }}"
+            {{- end }}
             {{- range $key, $value := .Values.frontend.env }}
             - name: {{ $key }}
               value: {{ $value | toJson }}

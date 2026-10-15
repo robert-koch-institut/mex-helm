@@ -1,7 +1,8 @@
 persistence:
-  storageClass: standard
+  className: standard
   size: 1Gi
 
 ingress:
   enabled: true
+  className: nginx
   host: drop.mex

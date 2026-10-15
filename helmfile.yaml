@@ -10,20 +10,21 @@ repositories:
   - name: rustfs
     url: https://charts.rustfs.com
 
+templates:
+  default:
+    namespace: mex
+    createNamespace: false
+    values:
+      - envs/{{ .Environment.Name }}/{{ .Release.Name }}/values.yaml
+    secrets:
+      - envs/{{ .Environment.Name }}/{{ .Release.Name }}/secrets.yaml
+
 releases:
   - name: s3-store
-    namespace: mex
-    createNamespace: false
     chart: ./charts/s3-store
-    missingFileHandler: Warn
-    values:
-      - envs/{{ .Environment.Name }}/s3-store/values.yaml
-    secrets:
-      - envs/{{ .Environment.Name }}/s3-store/secrets.yaml
+    inherit:
+      template: default
   - name: mex-drop
-    namespace: mex
-    createNamespace: false
     chart: ./charts/mex-drop
-    missingFileHandler: Warn
-    values:
-      - envs/{{ .Environment.Name }}/mex-drop/values.yaml
+    inherit:
+      template: default

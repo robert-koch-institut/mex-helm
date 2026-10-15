@@ -10,7 +10,7 @@ spec:
     - port: {{ .Values.service.frontend.port }}
       targetPort: 8020
       protocol: TCP
-      name: http
+      name: frontend
     - port: {{ .Values.service.api.port }}
       targetPort: 8021
       protocol: TCP
