@@ -66,7 +66,8 @@ components of the MEx project are open-sourced under the same license as well.
 - get age key from team
 - set environment SOPS_AGE_KEY_FILE to key path
 
-deploy with: `helmfile -e <env> apply`
+Diff first with: `helmfile -e <env> diff` to safely see changes to state without commiting to deploying.
+Deploy with: `helmfile -e <env> apply`
 
 ### Updating dependencies
 
