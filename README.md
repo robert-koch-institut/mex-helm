@@ -65,6 +65,7 @@ components of the MEx project are open-sourced under the same license as well.
 - install helm plugins: helm-secrets, helm-diff (https://github.com/jkroepke/helm-secrets, https://github.com/databus23/helm-diff)
 - get age key from team
 - set environment SOPS_AGE_KEY_FILE to key path
+- sops needs an editor program. it has some defaults (i.e. vi) but preferred editor should be set in env var SOPS_EDITOR
 
 Diff first with: `helmfile -e <env> diff` to safely see changes to state without commiting to deploying.
 Deploy with: `helmfile -e <env> apply`
