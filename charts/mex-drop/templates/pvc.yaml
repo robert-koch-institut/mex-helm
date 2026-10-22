@@ -6,7 +6,7 @@ metadata:
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode }}
-  
+
   {{- with .Values.persistence.className }}
   storageClassName: {{ . }}
   {{- end }}
