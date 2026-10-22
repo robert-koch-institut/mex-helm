@@ -2,7 +2,7 @@ environments:
   local:
     kubeContext: minikube
   dev:
-    kubeContext: workload
+    kubeContext: dev
 
 ---
 

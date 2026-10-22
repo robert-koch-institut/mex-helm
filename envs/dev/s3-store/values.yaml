@@ -12,8 +12,8 @@ rustfs:
       secret_key: "..."
 
   storageclass:
-    name: "nfs-client"
-    dataStorageSize: "512Mi"
+    name:
+    dataStorageSize: "1Gi"
 
   service:
     type: ClusterIP
@@ -30,14 +30,14 @@ rustfs:
 
   ingress:
     enabled: true
-    className: "nginx"
+    className:
     hosts:
-      - host: api-mex-s3.dev.platform.rki.local
+      - host: s3.mex.dev-platform.rki-dev.de
         paths:
           - path: /
             pathType: Prefix
             servicePort: endpoint
-      - host: console-mex-s3.dev.platform.rki.local
+      - host: console-s3.mex.dev-platform.rki-dev.de
         paths:
           - path: /
             pathType: Prefix
