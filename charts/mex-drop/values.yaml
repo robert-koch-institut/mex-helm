@@ -1,0 +1,35 @@
+replicaCount: 1
+image:
+  repository: ghcr.io/robert-koch-institut/mex-drop
+  tag: "1.9.0"
+
+service:
+  type: ClusterIP
+  frontend:
+    port: 8020
+  api:
+    port: 8021
+
+ingress:
+  enabled: false
+  className:
+  host:
+
+frontend:
+  env:
+    MEX_DROP_FRONTEND_HOST: 0.0.0.0
+    MEX_DROP_API_PORT: "80"
+  path: "/"
+
+api:
+  env:
+    MEX_DROP_DIRECTORY: data
+    MEX_DROP_API_HOST: 0.0.0.0
+  path: "/"
+
+persistence:
+  enabled: true
+  mountPath: /app/data
+  accessMode: ReadWriteOnce
+  className:
+  size:
