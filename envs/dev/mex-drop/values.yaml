@@ -3,4 +3,4 @@ persistence:
 
 ingress:
   enabled: true
-  host: drop.mex.dev-platform.rki-dev.de
+  host: mex-drop.app.dev-platform.rki-dev.de

@@ -32,12 +32,12 @@ rustfs:
     enabled: true
     className:
     hosts:
-      - host: s3.mex.dev-platform.rki-dev.de
+      - host: mex-s3.app.dev-platform.rki-dev.de
         paths:
           - path: /
             pathType: Prefix
             servicePort: endpoint
-      - host: console-s3.mex.dev-platform.rki-dev.de
+      - host: mex-s3-console.app.dev-platform.rki-dev.de
         paths:
           - path: /
             pathType: Prefix
