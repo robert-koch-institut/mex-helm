@@ -61,17 +61,32 @@ components of the MEx project are open-sourced under the same license as well.
 
 ### Installation
 
-- install python on your system
-- on unix, run `make install`
-- on windows, run `.\mex.bat install`
+- install helm, helmfile
+- install helm plugin: helm-diff (https://github.com/databus23/helm-diff)
 
-### Linting and testing
 
-- run all linters with `make lint` or `.\mex.bat lint`
+#### non-local envs
+- install sops, age
+- install helm-plugin: helm-secrets (https://github.com/jkroepke/helm-secrets)
+- get age key from team
+- set environment SOPS_AGE_KEY_FILE to key path
+- sops needs an editor program. it has some defaults (i.e. vi) but preferred editor should be set in env var SOPS_EDITOR
+
+#### local env
+- consider using minikube: https://minikube.sigs.k8s.io/docs/start/
+
+### Deployment
+
+currently, envs are: local, dev
+
+- check changes before deploying with `helmfile -e <env> diff`
+- deploy with `helmfile -e <env> apply`
+
+#### non-local envs
+- read/edit secrets with: `sops <path/to/secrets.yaml>`
 
 ### Updating dependencies
 
 - update boilerplate files with `cruft update`
-- update global requirements in `requirements.txt` manually
 - update git hooks with `pre-commit autoupdate`
 - update github actions in `.github/workflows/*.yml` manually

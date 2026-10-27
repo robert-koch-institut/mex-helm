@@ -9,12 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- helmfile for declarative deployments
+- mex-drop helm chart and deployment
+- s3-store deployment
+- very basic documentation for setup
+- working local and wip dev environments
+
 ### Changes
 
 - new template https://github.com/robert-koch-institut/mex-template/releases/tag/2.0.1
 ### Deprecated
 
 ### Removed
+
+- python-project related files from template
 
 ### Fixed
 

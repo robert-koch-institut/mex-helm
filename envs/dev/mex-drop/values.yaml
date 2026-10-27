@@ -1,0 +1,6 @@
+persistence:
+  size: 1Gi
+
+ingress:
+  enabled: true
+  host: mex-drop.app.dev-platform.rki-dev.de

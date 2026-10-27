@@ -1,0 +1,32 @@
+environments:
+  local:
+    kubeContext: minikube
+  dev:
+    kubeContext: dev
+
+---
+
+repositories:
+  - name: rustfs
+    url: https://charts.rustfs.com
+
+templates:
+  default:
+    namespace: mex
+    createNamespace: false
+    values:
+      - envs/{{ .Environment.Name }}/{{ "{{ .Release.Name }}" }}/values.yaml
+    {{ if ne .Environment.Name "local" }}
+    secrets:
+      - envs/{{ .Environment.Name }}/{{ "{{ .Release.Name }}" }}/secrets.yaml
+    {{ end }}
+
+releases:
+  - name: s3-store
+    chart: ./charts/s3-store
+    inherit:
+      - template: default
+  - name: mex-drop
+    chart: ./charts/mex-drop
+    inherit:
+      - template: default
