@@ -13,5 +13,5 @@ spec:
 
   resources:
     requests:
-      storage: {{ .Values.persistence.size }}
+      storage: {{ required "persistence.size needs to be set." .Values.persistence.size }}
 {{- end }}

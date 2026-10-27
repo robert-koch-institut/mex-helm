@@ -21,7 +21,7 @@ spec:
                 port:
                   number: {{ .Values.service.frontend.port }}
 
-    - host: "api-{{ .Values.ingress.host }}"
+    - host: "api-{{ required "ingress.host needs to be set." .Values.ingress.host }}"
       http:
         paths:
           - path: {{ .Values.api.path }}
