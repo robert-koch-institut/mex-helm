@@ -53,8 +53,7 @@ rustfs:
 
 provisioning:
   buckets:
-    - mex-etl-dev
-    - mex-etl-local
+    - mex-drop
 
   policies:
     - name: mex-extractors-rw-policy
