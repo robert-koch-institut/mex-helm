@@ -32,12 +32,12 @@ rustfs:
     enabled: true
     className:
     hosts:
-      - host: s3
+      - host: mex-s3
         paths:
           - path: /
             pathType: Prefix
             servicePort: endpoint
-      - host: s3-console
+      - host: mex-s3-console
         paths:
           - path: /
             pathType: Prefix
