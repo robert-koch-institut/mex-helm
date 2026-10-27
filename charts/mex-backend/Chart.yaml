@@ -1,0 +1,4 @@
+apiVersion: v2
+name: mex-backend
+description: Backend for the MEx project.
+version: 4.7.0

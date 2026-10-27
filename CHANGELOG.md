@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - s3-store deployment
 - very basic documentation for setup
 - working local and wip dev environments
+- mex-backend helm chart and deployment
 
 ### Changes
 

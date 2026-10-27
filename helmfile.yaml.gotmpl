@@ -9,6 +9,8 @@ environments:
 repositories:
   - name: rustfs
     url: https://charts.rustfs.com
+  - name: neo4j
+    url: https://neo4j.github.io/helm-charts/
 
 templates:
   default:
@@ -28,5 +30,13 @@ releases:
       - template: default
   - name: mex-drop
     chart: ./charts/mex-drop
+    inherit:
+      - template: default
+  - name: neo4j
+    chart: neo4j/neo4j
+    inherit:
+      - template: default
+  - name: mex-backend
+    chart: ./charts/mex-backend
     inherit:
       - template: default

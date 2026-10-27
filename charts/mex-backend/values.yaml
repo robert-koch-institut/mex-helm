@@ -1,0 +1,22 @@
+replicaCount: 1
+image:
+  repository: ghcr.io/robert-koch-institut/mex-backend
+  tag: "4.7.0"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className:
+  host:
+
+path: "/"
+env:
+  MEX_BACKEND_HOST: 0.0.0.0
+  MEX_GRAPH_URL: "neo4j://neo4j:7687"
+  MEX_IDENTITY_PROVIDER: graph
+  MEX_BACKEND_API_KEY_DATABASE: '{"write":["write_key"]}'
+  # MEX_BACKEND_CACHE_CONNECTOR: valkey
+  # MEX_BACKEND_VALKEY_URL: valkey://valkey:6379
