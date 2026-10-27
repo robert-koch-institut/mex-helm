@@ -32,12 +32,12 @@ rustfs:
     enabled: true
     className: "nginx"
     hosts:
-      - host: api-s3.mex
+      - host: api-s3
         paths:
           - path: /
             pathType: Prefix
             servicePort: endpoint
-      - host: console-s3.mex
+      - host: console-s3
         paths:
           - path: /
             pathType: Prefix

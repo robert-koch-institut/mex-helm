@@ -1,0 +1,4 @@
+apiVersion: v2
+name: mex-admin
+description: Metadata admin web application.
+version: 4.7.0

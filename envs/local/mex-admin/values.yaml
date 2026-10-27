@@ -1,0 +1,11 @@
+ingress:
+  enabled: true
+  className: nginx
+  host: mex-admin
+
+api:
+  env:
+    MEX_ADMIN_USER_DATABASE: '{"read":{"reader":"read_pw"},"write":{"writer":"write_pw"}}'
+    MEX_BACKEND_API_KEY: write_key
+    MEX_BACKEND_API_URL: "http://mex-backend-svc:8080/"
+    MEX_IDENTITY_PROVIDER: backend
