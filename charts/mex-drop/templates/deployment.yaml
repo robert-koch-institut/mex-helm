@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: {{ .Release.Name }}-frontend
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag .Chart.AppVersion }}"
           command: ["drop-frontend"]
           ports:
             - containerPort: 8020
@@ -38,7 +38,7 @@ spec:
           {{- end }}
 
         - name: {{ .Release.Name }}-api
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag .Chart.AppVersion }}"
           command: ["drop-api"]
           ports:
             - containerPort: 8021
