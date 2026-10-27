@@ -4,8 +4,7 @@ persistence:
 
 ingress:
   enabled: true
-  className: nginx
-  host: drop.mex
+  host: mex-drop
 
 api:
   env:
