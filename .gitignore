@@ -152,5 +152,5 @@ storage/
 tmp*/
 work/
 
-# charts
+# helm charts
 /charts/*/charts
