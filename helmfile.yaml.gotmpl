@@ -15,9 +15,11 @@ templates:
     namespace: mex
     createNamespace: false
     values:
-      - envs/{{ .Environment.Name }}/{{ .Release.Name }}/values.yaml
+      - envs/{{ .Environment.Name }}/{{ "{{ .Release.Name }}" }}/values.yaml
+    {{ if ne .Environment.Name "local" }}
     secrets:
-      - envs/{{ .Environment.Name }}/{{ .Release.Name }}/secrets.yaml
+      - envs/{{ .Environment.Name }}/{{ "{{ .Release.Name }}" }}/secrets.yaml
+    {{ end }}
 
 releases:
   - name: s3-store
