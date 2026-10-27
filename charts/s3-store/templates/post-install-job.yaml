@@ -14,7 +14,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: rustfs-rc-setup
-          image: rustfs/rc:v0.1.36
+          image: "{{ .Values.rustfsrc.image }}:{{ .Values.rustfsrc.tag }}"
           env:
             - name: ROOT_USER
               value: {{ .Values.rustfs.secret.rustfs.access_key | quote }}
