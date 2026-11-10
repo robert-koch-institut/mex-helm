@@ -5,13 +5,13 @@ metadata:
   labels:
     app: {{ .Release.Name }}
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   ports:
-    - port: {{ .Values.service.frontend.port }}
+    - port: 8020
       targetPort: 8020
       protocol: TCP
       name: frontend
-    - port: {{ .Values.service.api.port }}
+    - port: 8021
       targetPort: 8021
       protocol: TCP
       name: api

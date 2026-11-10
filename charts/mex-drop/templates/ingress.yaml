@@ -10,25 +10,25 @@ spec:
   {{- end }}
 
   rules:
-    - host: {{ .Values.ingress.host }}
+    - host: {{ .Values.ingress.hostName }}
       http:
         paths:
-          - path: {{ .Values.frontend.path }}
+          - path: "/"
             pathType: Prefix
             backend:
               service:
                 name: {{ .Release.Name }}-svc
                 port:
-                  number: {{ .Values.service.frontend.port }}
+                  number: 8020
 
-    - host: "api-{{ required "ingress.host needs to be set." .Values.ingress.host }}"
+    - host: "api-{{ required "ingress.hostName needs to be set." .Values.ingress.hostName }}"
       http:
         paths:
-          - path: {{ .Values.api.path }}
+          - path: "/"
             pathType: Prefix
             backend:
               service:
                 name: {{ .Release.Name }}-svc
                 port:
-                  number: {{ .Values.service.api.port }}
+                  number: 8021
 {{- end }}
