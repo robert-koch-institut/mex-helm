@@ -59,21 +59,25 @@ components of the MEx project are open-sourced under the same license as well.
 
 ## Development
 
-### Installation
+### Installation (Linux & Windows)
 
-- install helm, helmfile
-- install helm plugin: helm-diff (https://github.com/databus23/helm-diff)
+- install kubectl, helm, helmfile
+    - on Linux, consider using the package manager of the distribution (e.g. apt on debian)
+    - on Windows, consider using Scoop (https://scoop.sh/)
+- install with `helm plugin install <url>`: helm-diff (https://github.com/databus23/helm-diff)
+- setup a kubeconfig with contexts named after environments (local, dev)
+    - https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/
 
 
 #### non-local envs
 - install sops, age
-- install helm-plugin: helm-secrets (https://github.com/jkroepke/helm-secrets)
+- install with `helm plugin install <url>`: helm-secrets (https://github.com/jkroepke/helm-secrets)
 - get age key from team
 - set environment SOPS_AGE_KEY_FILE to key path
 - sops needs an editor program. it has some defaults (i.e. vi) but preferred editor should be set in env var SOPS_EDITOR
 
 #### local env
-- consider using minikube: https://minikube.sigs.k8s.io/docs/start/
+- (Linux-only) consider using minikube: https://minikube.sigs.k8s.io/docs/start/
 
 ### Deployment
 

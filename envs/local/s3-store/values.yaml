@@ -30,14 +30,14 @@ rustfs:
 
   ingress:
     enabled: true
-    className: "nginx"
+    className:
     hosts:
-      - host: api-s3
+      - host: mex-s3
         paths:
           - path: /
             pathType: Prefix
             servicePort: endpoint
-      - host: console-s3
+      - host: mex-s3-console
         paths:
           - path: /
             pathType: Prefix
@@ -53,8 +53,7 @@ rustfs:
 
 provisioning:
   buckets:
-    - mex-etl-dev
-    - mex-etl-local
+    - mex-drop
 
   policies:
     - name: mex-extractors-rw-policy
