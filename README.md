@@ -59,19 +59,38 @@ components of the MEx project are open-sourced under the same license as well.
 
 ## Development
 
-### Installation
+### Installation (Linux & Windows)
 
-- install python on your system
-- on unix, run `make install`
-- on windows, run `.\mex.bat install`
+- install kubectl, helm, helmfile
+    - on Linux, consider using the package manager of the distribution (e.g. apt on debian)
+    - on Windows, consider using Scoop (https://scoop.sh/)
+- install with `helm plugin install <url>`: helm-diff (https://github.com/databus23/helm-diff)
+- setup a kubeconfig with contexts named after environments (local, dev)
+    - https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/
 
-### Linting and testing
 
-- run all linters with `make lint` or `.\mex.bat lint`
+#### non-local envs
+- install sops, age
+- install with `helm plugin install <url>`: helm-secrets (https://github.com/jkroepke/helm-secrets)
+- get age key from team
+- set environment SOPS_AGE_KEY_FILE to key path
+- sops needs an editor program. it has some defaults (i.e. vi) but preferred editor should be set in env var SOPS_EDITOR
+
+#### local env
+- (Linux-only) consider using minikube: https://minikube.sigs.k8s.io/docs/start/
+
+### Deployment
+
+currently, envs are: local, dev
+
+- check changes before deploying with `helmfile -e <env> diff`
+- deploy with `helmfile -e <env> apply`
+
+#### non-local envs
+- read/edit secrets with: `sops <path/to/secrets.yaml>`
 
 ### Updating dependencies
 
 - update boilerplate files with `cruft update`
-- update global requirements in `requirements.txt` manually
 - update git hooks with `pre-commit autoupdate`
 - update github actions in `.github/workflows/*.yml` manually

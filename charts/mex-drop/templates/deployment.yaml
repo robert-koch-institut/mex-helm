@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-frontend
+          image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag .Chart.AppVersion }}"
+          command: ["drop-frontend"]
+          ports:
+            - containerPort: 8020
+          env:
+            {{- if .Values.ingress.enabled }}
+            - name: REFLEX_DEPLOY_URL
+              value: "http://{{ .Values.ingress.hostName }}"
+            - name: REFLEX_API_URL
+              value: "http://api-{{ .Values.ingress.hostName }}"
+            {{- end }}
+            - name: MEX_DROP_FRONTEND_HOST
+              value: "0.0.0.0"
+            - name: MEX_DROP_API_PORT
+              value: "80"
+
+        - name: {{ .Release.Name }}-api
+          image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag .Chart.AppVersion }}"
+          command: ["drop-api"]
+          ports:
+            - containerPort: 8021
+          env:
+            - name: MEX_DROP_DIRECTORY
+              value: "data"
+            - name: MEX_DROP_API_HOST
+              value: "0.0.0.0"
+            - name: MEX_DROP_API_KEY_DATABASE
+              value: {{ .Values.drop.apiKey | quote }}

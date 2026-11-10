@@ -1,0 +1,3 @@
+ingress:
+  className:
+  hostName: mex-drop.app.dev-platform.rki-dev.de

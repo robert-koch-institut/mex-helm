@@ -1,0 +1,3 @@
+ingress:
+  className:
+  hostName: mex-drop

@@ -1,0 +1,11 @@
+image:
+  repository: ghcr.io/robert-koch-institut/mex-drop
+  tag: 487da61473c0cb56e035119ee80b7ae5b7285cfb # 1.10.0
+
+drop:
+  apiKey: '{"mex":["mex"]}'
+
+ingress:
+  enabled: true
+  className: nginx
+  hostName: mex-drop

@@ -1,0 +1,81 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-setup-users
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: rustfs-rc-setup
+          image: "{{ .Values.rustfsrc.image }}:{{ .Values.rustfsrc.tag }}"
+          env:
+            - name: ROOT_USER
+              value: {{ .Values.rustfs.secret.rustfs.access_key | quote }}
+            - name: ROOT_PASSWORD
+              value: {{ .Values.rustfs.secret.rustfs.secret_key | quote }}
+            - name: APP_USER
+              value: {{ .Values.appCredentials.user | quote }}
+            - name: APP_SECRET
+              value: {{ .Values.appCredentials.secret | quote }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              ENDPOINT="http://{{ .Release.Name }}-rustfs-svc:{{ .Values.rustfs.service.endpoint.port }}"
+
+              echo "==> Waiting for RustFS service..."
+              MAX_RETRIES=20
+              RETRY=0
+              until rc alias set local "$ENDPOINT" "$ROOT_USER" "$ROOT_PASSWORD"; do
+                if [ "$RETRY" -ge "$MAX_RETRIES" ]; then
+                  echo "Error: Timeout waiting for RustFS to become available."
+                  exit 1
+                fi
+                RETRY=$((RETRY+1))
+                sleep 3
+              done
+
+              # declaratively loop through and create buckets
+              {{- range .Values.provisioning.buckets }}
+              echo "==> Ensuring bucket: {{ . }}"
+              rc mb --ignore-existing local/{{ . }}
+              {{- end }}
+
+              # create the application user
+              echo "==> Ensuring application user: $APP_USER"
+              if ! rc admin user info local "$APP_USER" >/dev/null 2>&1; then
+                rc admin user add local "$APP_USER" "$APP_SECRET"
+              else
+                echo "User $APP_USER already exists, skipping creation."
+              fi
+
+              # declaratively loop through and create/update policies
+              {{- range .Values.provisioning.policies }}
+              echo "==> Applying policy: {{ .name }}"
+              cat <<EOF > /tmp/{{ .name }}.json
+              {{ .definition | toJson }}
+              EOF
+
+              # execute policy creation, but only swallow specific "already exists" errors
+              OUTPUT=$(rc admin policy create local {{ .name }} /tmp/{{ .name }}.json 2>&1) || {
+                if echo "$OUTPUT" | grep -qi "already exists"; then
+                  echo "Policy {{ .name }} already exists (ignoring)."
+                else
+                  echo "$OUTPUT"
+                  exit 1
+                fi
+              }
+
+              # attach doesn't typically error on re-attachment, so it remains cleanly in the set -e flow
+              rc admin policy attach local {{ .name }} --user "$APP_USER"
+              {{- end }}
+
+              echo "==> Post-install configuration complete!"

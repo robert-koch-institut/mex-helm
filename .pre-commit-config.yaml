@@ -8,6 +8,7 @@ repos:
         args: [--autofix, --indent=4, --no-ensure-ascii]
         exclude: .cruft.json
       - id: check-yaml
+        args: [--allow-multiple-documents]
         name: yaml
         exclude: templates\/[a-z_-]+.yaml
       - id: end-of-file-fixer
