@@ -10,14 +10,14 @@ spec:
   {{- end }}
 
   rules:
-    - host: {{ .Values.ingress.host }}
+    - host: {{ .Values.ingress.hostName }}
       http:
         paths:
-          - path: {{ .Values.path }}
+          - path: "/"
             pathType: Prefix
             backend:
               service:
                 name: {{ .Release.Name }}-svc
                 port:
-                  number: {{ .Values.service.port }}
+                  number: 80
 {{- end }}

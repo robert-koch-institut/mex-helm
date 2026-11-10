@@ -1,5 +1,5 @@
 ingress:
   enabled: true
-  className: nginx
-  host: mex-backend
+  className:
+  hostName: mex-backend
 

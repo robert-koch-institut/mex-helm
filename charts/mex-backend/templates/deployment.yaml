@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}
 spec:
-  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}
@@ -18,15 +17,12 @@ spec:
           command: ["backend"]
           ports:
             - containerPort: 8080
-          {{- if .Values.configMapData }}
-          envFrom:
-            - configMapRef:
-                name: {{ .Release.Name }}-config
-          {{- end }}
-          {{- if .Values.env }}
           env:
-            {{- range $key, $value := .Values.env }}
-            - name: {{ $key }}
-              value: {{ $value | toJson }}
-            {{- end }}
-          {{- end }}
+            - name: MEX_BACKEND_HOST
+              value: "0.0.0.0"
+            - name: MEX_GRAPH_URL
+              value: {{ .Values.backend.graphUrl }}
+            - name: MEX_BACKEND_IDENTITY_PROVIDER
+              value: {{ .Values.backend.identityProvider }}
+            - name: MEX_BACKEND_API_KEY_DATABASE
+              value: {{ .Values.backend.apiKey | quote }}
