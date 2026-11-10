@@ -61,8 +61,12 @@ components of the MEx project are open-sourced under the same license as well.
 
 ### Installation (Linux & Windows)
 
-- install helm and helmfile
+- install kubectl, helm, helmfile
+    - on Linux, consider using the package manager of the distribution (e.g. apt on debian)
+    - on Windows, consider using Scoop (https://scoop.sh/)
 - install with `helm plugin install <url>`: helm-diff (https://github.com/databus23/helm-diff)
+- setup a kubeconfig with contexts named after environments (local, dev)
+    - https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/
 
 
 #### non-local envs
