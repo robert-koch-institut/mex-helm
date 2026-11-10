@@ -1,28 +1,18 @@
-replicaCount: 1
 image:
   repository: ghcr.io/robert-koch-institut/mex-admin
-  tag: "4.7.0"
+  tag: "8cefc25635b0537b2b277c939e3022ca2565c8e2" # 4.7.0
 
-service:
-  type: ClusterIP
-  frontend:
-    port: 8030
-  api:
-    port: 8031
+admin:
+  userDatabase: '{"read":{"reader":"read_pw"},"write":{"writer":"write_pw"}}'
+
+mex:
+  identityProvider: backend
+
+  backend:
+    apiUrl: "http://mex-backend:8080/"
+    apiKey: write_key
 
 ingress:
   enabled: false
   className:
-  host:
-
-frontend:
-  env:
-    MEX_ADMIN_FRONTEND_HOST: 0.0.0.0
-    MEX_ADMIN_API_PORT: "80"
-  path: "/"
-
-api:
-  env:
-    MEX_ADMIN_DIRECTORY: data
-    MEX_ADMIN_API_HOST: 0.0.0.0
-  path: "/"
+  hostName: mex-admin
