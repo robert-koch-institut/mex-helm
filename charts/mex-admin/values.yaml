@@ -9,7 +9,7 @@ mex:
   identityProvider: backend
 
   backend:
-    apiUrl: "http://mex-backend:8080/"
+    apiUrl: "http://mex-backend-svc:8080/"
     apiKey: write_key
 
 ingress:
